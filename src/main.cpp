@@ -82,10 +82,16 @@ int main() {
         string full_path = unique_path + "/" + args[0];
 
         if (access(full_path.c_str(), X_OK) == 0) {
-          execv(full_path.c_str(), const_cast<char* const*>(args.data()));
-          cout << "HEllo?" << endl;
-          file_found = true;
-          break;
+
+          pid_t c_pid = fork();
+          if (c_pid == 0) {
+            execv(full_path.c_str(), const_cast<char* const*>(args.data()));
+          } else if (c_pid > 0) {
+            file_found = true;
+            break;
+          }
+          
+
         }
 
       }
