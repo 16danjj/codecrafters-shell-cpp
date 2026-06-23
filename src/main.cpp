@@ -65,21 +65,23 @@ int main() {
         args.push_back(token.c_str());
       }
 
-      args.push_back(nullptr); // execv requires a the array to be terminated by a nullptr
+      args.push_back(NULL); // execv requires a the array to be terminated by a nullptr
 
       // Check if executable exists 
       string path = getenv("PATH");
       stringstream s2(path);
       string unique_path;
 
+      cout << "Hello??" << endl;
+
 
       while (getline(s2,unique_path, ':')) {
 
         string full_path = unique_path + "/" + args[0];
-        
+        cout << "full path: " << full_path;
 
         if (access(full_path.c_str(), X_OK) == 0) {
-          cout << "full path: " << full_path;
+          
           execv(full_path.c_str(), const_cast<char* const*>(args.data()));
           file_found = true;
           break;
