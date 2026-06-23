@@ -30,7 +30,7 @@ int main() {
       string unique_path;
 
       while (getline(ss,unique_path, ':')) {
-        string full_path = unique_path + command.substr(5);
+        string full_path = unique_path + "//" + command.substr(5);
         cout << full_path << endl;
 
       }
