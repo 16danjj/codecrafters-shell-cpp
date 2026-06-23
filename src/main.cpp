@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 int main() {
   // Flush after every std::cout / std:cerr
@@ -7,6 +9,7 @@ int main() {
   std::cerr << std::unitbuf;
 
   std::string command;
+  
 
   while (1) {
   std::cout << "$ ";
