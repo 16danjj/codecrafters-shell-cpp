@@ -62,8 +62,12 @@ int main() {
 
       vector<const char*> args;
       while (getline(s1,token,' ')) {
+        cout << "Token : " << token << endl;
         args.push_back(token.c_str());
       }
+
+      cout << "First element : " << args[0] << endl;
+      cout << "Second element: " << args[1] << endl;
 
       args.push_back(NULL); // execv requires a the array to be terminated by a nullptr
 
@@ -71,9 +75,6 @@ int main() {
       string path = getenv("PATH");
       stringstream s2(path);
       string unique_path;
-
-      cout << "Hello??" << endl;
-
 
       while (getline(s2,unique_path, ':')) {
 
