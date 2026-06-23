@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <sstream>
 #include <unistd.h>
+#include <vector>
 using namespace std;
 
 int main() {
@@ -11,9 +12,11 @@ int main() {
   cerr << unitbuf;
 
   string command;
+
   
   while (1) {
     cout << "$ ";
+
 
     getline(cin, command);
     bool file_found = false;
@@ -52,9 +55,44 @@ int main() {
     else if (command.substr(0,5) == "echo ") {
       cout << command.substr(5) << endl;
     } else {
-      cout << command << ": command not found" << endl;
-    }
 
+      // executable with arguments related logic
+      stringstream s1(command);
+      string token;
+
+      vector<const char*> args;
+      while (getline(s1,token,' ')) {
+        args.push_back(token.c_str());
+      }
+
+      args.push_back(nullptr); // execv requires a the array to be terminated by a nullptr
+
+      // Check if executable exists 
+      string path = getenv("PATH");
+      stringstream s2(path);
+      string unique_path;
+
+
+      while (getline(s2,unique_path, ':')) {
+
+        string full_path = unique_path + "/" + args[0];
+
+        if (access(full_path.c_str(), X_OK) == 0) {
+          execv(full_path.c_str(), const_cast<char* const*>(args.data()));
+          file_found = true;
+          break;
+        }
+
+      }
+
+      // This currently serves as our catch-all for all other cases 
+      if (!file_found) {
+        cout << command << ": command not found" << endl;
+      }
+
+
+    }
+    
   }
 
 }
