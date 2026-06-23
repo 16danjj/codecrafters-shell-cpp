@@ -34,7 +34,7 @@ int main() {
 
         if (access(full_path.c_str(), X_OK) == 0) {
           cout << command.substr(5) << "is " << full_path << endl;
-          return;
+          return 0;
         }
 
       }
