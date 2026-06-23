@@ -15,7 +15,7 @@ int main() {
 
   
   while (1) {
-    cout << "$";
+    cout << "$ ";
 
 
     getline(cin, command);
