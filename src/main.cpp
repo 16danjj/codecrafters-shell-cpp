@@ -62,14 +62,14 @@ int main() {
 
       vector<const char*> args;
       vector<string> temp_storage;
-      string cmd_to_execute;
+
       while (getline(s1,token,' ')) {
         temp_storage.push_back(token);
       }
 
       for (auto& x: temp_storage) {
         args.push_back(x.c_str());
-        cmd_to_execute += x;
+
       }
 
       args.push_back(NULL); // execv requires a the array to be terminated by a nullptr
@@ -84,7 +84,6 @@ int main() {
         string full_path = unique_path + "/" + args[0];
 
         if (access(full_path.c_str(), X_OK) == 0) {
-            cout << "What is it : " << full_path << endl;
             system(command.c_str());
             file_found = true;
             break;
