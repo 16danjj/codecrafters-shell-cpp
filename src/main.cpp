@@ -2,6 +2,7 @@
 #include <string>
 #include <filesystem>
 #include <sstream>
+#include <unistd.h>
 using namespace std;
 
 int main() {
@@ -26,16 +27,17 @@ int main() {
 
       string path = getenv("PATH");
       stringstream ss(path);
-
       string unique_path;
 
       while (getline(ss,unique_path, ':')) {
         string full_path = unique_path + "/" + command.substr(5);
-        cout << full_path << endl;
+
+        if (access(full_path.c_str(), X_OK) == 0) {
+          cout << command.substr(5) << "is " << full_path << endl;
+          return;
+        }
 
       }
-
-
       cout << command.substr(5) << ": not found" << endl;
     }
   }
