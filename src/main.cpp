@@ -80,10 +80,8 @@ int main() {
       while (getline(s2,unique_path, ':')) {
 
         string full_path = unique_path + "/" + args[0];
-        cout << "full path: " << full_path << endl;
 
         if (access(full_path.c_str(), X_OK) == 0) {
-          cout << "HELLOOOOOO" << endl;
           execv(full_path.c_str(), const_cast<char* const*>(args.data()));
           file_found = true;
           break;
