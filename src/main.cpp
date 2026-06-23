@@ -60,19 +60,11 @@ int main() {
       stringstream s1(command);
       string token;
 
-      vector<const char*> args;
       vector<string> temp_storage;
 
       while (getline(s1,token,' ')) {
         temp_storage.push_back(token);
       }
-
-      for (auto& x: temp_storage) {
-        args.push_back(x.c_str());
-
-      }
-
-      args.push_back(NULL); // execv requires a the array to be terminated by a nullptr
 
       // Check if executable exists 
       string path = getenv("PATH");
@@ -81,7 +73,7 @@ int main() {
 
       while (getline(s2,unique_path, ':')) {
 
-        string full_path = unique_path + "/" + args[0];
+        string full_path = unique_path + "/" + temp_storage[0];
 
         if (access(full_path.c_str(), X_OK) == 0) {
             system(command.c_str());
