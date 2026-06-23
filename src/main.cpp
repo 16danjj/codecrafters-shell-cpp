@@ -84,14 +84,12 @@ int main() {
         string full_path = unique_path + "/" + args[0];
 
         if (access(full_path.c_str(), X_OK) == 0) {
-
+            cout << "What is it : " << full_path << endl;
             system(cmd_to_execute.c_str());
             file_found = true;
             break;
           }
           
-        
-
       }
 
       // This currently serves as our catch-all for all other cases 
