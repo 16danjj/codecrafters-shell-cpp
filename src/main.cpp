@@ -84,7 +84,7 @@ int main() {
         if (access(full_path.c_str(), X_OK) == 0) {
           execv(full_path.c_str(), const_cast<char* const*>(args.data()));
           file_found = true;
-          break;
+          //break;
         }
 
       }
