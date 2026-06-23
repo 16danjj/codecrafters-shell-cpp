@@ -61,13 +61,14 @@ int main() {
       string token;
 
       vector<const char*> args;
+      vector<string> temp_storage;
       while (getline(s1,token,' ')) {
-        cout << "Token : " << token << endl;
-        args.push_back(token.c_str());
+        temp_storage.push_back(token);
       }
 
-      cout << "First element : " << args[0] << endl;
-      cout << "Second element: " << args[1] << endl;
+      for (auto& x: temp_storage) {
+        args.push_back(x.c_str());
+      }
 
       args.push_back(NULL); // execv requires a the array to be terminated by a nullptr
 
@@ -79,10 +80,10 @@ int main() {
       while (getline(s2,unique_path, ':')) {
 
         string full_path = unique_path + "/" + args[0];
-        cout << "full path: " << full_path;
+        cout << "full path: " << full_path << endl;
 
         if (access(full_path.c_str(), X_OK) == 0) {
-          
+          cout << "HELLOOOOOO" << endl;
           execv(full_path.c_str(), const_cast<char* const*>(args.data()));
           file_found = true;
           break;
