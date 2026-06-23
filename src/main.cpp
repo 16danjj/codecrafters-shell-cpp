@@ -62,12 +62,14 @@ int main() {
 
       vector<const char*> args;
       vector<string> temp_storage;
+      string cmd_to_execute;
       while (getline(s1,token,' ')) {
         temp_storage.push_back(token);
       }
 
       for (auto& x: temp_storage) {
         args.push_back(x.c_str());
+        cmd_to_execute += x;
       }
 
       args.push_back(NULL); // execv requires a the array to be terminated by a nullptr
@@ -83,15 +85,11 @@ int main() {
 
         if (access(full_path.c_str(), X_OK) == 0) {
 
-          pid_t c_pid = fork();
-          if (c_pid == 0) {
-            execv(full_path.c_str(), const_cast<char* const*>(args.data()));
-          } else if (c_pid > 0) {
+            system(cmd_to_execute.c_str());
             file_found = true;
             break;
           }
           
-
         }
 
       }
@@ -100,7 +98,6 @@ int main() {
       if (!file_found) {
         cout << command << ": command not found" << endl;
       }
-
 
     }
     
