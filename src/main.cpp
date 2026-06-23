@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
-namespace fs = std::filesystem;
+
 
 int main() {
   // Flush after every std::cout / std:cerr
@@ -10,11 +10,14 @@ int main() {
 
   std::string command;
   
-
   while (1) {
   std::cout << "$ ";
 
   std::getline(std::cin, command);
+
+  std::string path = getenv("PATH");
+  std::cout << path << std::endl;
+  break;
 
   if (command == "exit"){
     break;
