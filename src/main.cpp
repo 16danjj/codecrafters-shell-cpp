@@ -33,7 +33,7 @@ int main() {
         string full_path = unique_path + "/" + command.substr(5);
 
         if (access(full_path.c_str(), X_OK) == 0) {
-          cout << command.substr(5) << "is " << full_path << endl;
+          cout << command.substr(5) << " is " << full_path << endl;
           return 0;
         }
 
