@@ -69,7 +69,9 @@ namespace shell {
             // This currently serves as our catch-all for all other cases 
             if (!file_found) {
                 cout << command << ": command not found" << endl;
-            }           
+            } 
+            
+            return 0;
         }
 
     }
