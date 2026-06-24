@@ -31,7 +31,6 @@ namespace shell::find_executable {
             string full_path = unique_path + "/" + temp_storage[0];
 
             if (access(full_path.c_str(), X_OK) == 0) {
-                system(command.c_str());
                 file_found = true;
                 break;
             }
