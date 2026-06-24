@@ -12,7 +12,7 @@ namespace shell::type {
 
             bool file_found = false;
 
-            if (input == "echo" || input == "exit" || input == "type") {
+            if (input == "echo" || input == "exit" || input == "type" || input == "pwd") {
                 cout << input << " is a shell builtin" << endl;
             } 
             
