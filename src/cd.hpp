@@ -14,7 +14,12 @@ namespace shell::cd {
 
         int result;
 
+        if (input == "~") {
 
+            string path = getenv("HOME");
+            chdir(path.c_str());
+            return 0;
+        }
 
         result = chdir(input.c_str());
 
