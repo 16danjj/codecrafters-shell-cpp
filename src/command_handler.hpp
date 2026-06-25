@@ -10,6 +10,7 @@
 #include "find_executable.hpp"
 #include <unordered_map>
 #include <functional>
+#include <regex>
 
 using namespace std;
 
@@ -24,6 +25,66 @@ namespace shell {
         {"cd", &cd::execute},
     };
 
+    string remove_whitespace(string& input) {
+        // Space handling
+        int index = 0;
+        int start_index;
+        size_t range;
+
+        while (index < input.length()) {
+
+            start_index = 0;
+            range = 0;
+
+            if (input[index] == ' ') {
+                start_index = index;
+                while (input[index + 1] == ' ') {
+                    range += 1;
+                    index += 1;
+                }
+            }
+
+            if (range > 0) {
+                input.erase(start_index, range);
+            }
+
+            index += 1;
+        }
+
+        return input;
+    }
+
+    void handle_input(string& input) {
+
+        string quote_sanitised;
+        regex pattern("'([^']*)'");
+        smatch match;
+        string::const_iterator start = input.cbegin();
+
+        if (input.find('\'') != string::npos) {
+            while(regex_search(start, input.cend(), match, pattern)){
+                if (match.prefix().length()) {
+                    string prefixed_string = match.prefix();
+                    quote_sanitised += remove_whitespace(prefixed_string);
+                }
+
+                quote_sanitised += match[1];
+
+                string temp_suffix = match.suffix();
+                
+                if (temp_suffix.find('\'') == string::npos) {
+                    quote_sanitised += remove_whitespace(temp_suffix);
+                }
+                
+                start = match.suffix().first;
+            }
+        } else {
+            quote_sanitised += remove_whitespace(input);
+        }
+
+        input = quote_sanitised;
+    }
+
     int execute(const string& command) {
         size_t index_first_space = command.find(" ");
         string extracted_command;
@@ -33,7 +94,7 @@ namespace shell {
         if (index_first_space != string::npos) {
             extracted_command = command.substr(0,index_first_space);
             input = command.substr(index_first_space + 1);
-
+            handle_input(input);
         } else {
             extracted_command = command;
         }
