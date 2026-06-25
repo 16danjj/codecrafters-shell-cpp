@@ -97,12 +97,15 @@ namespace shell {
             quote_sanitised = pattern_match_handling(input, pattern_double_quote, "double");
         }
 
+        quote_sanitised = quote_sanitised.empty()? input : quote_sanitised;
+
         if (quote_sanitised.find('\'') != string::npos) {
             quote_sanitised = pattern_match_handling(quote_sanitised, pattern_single_quote, "single");
         } 
 
-        if (quote_sanitised.empty()) {
-            quote_sanitised += remove_whitespace(input);
+        if (quote_sanitised == input) {
+            input = remove_whitespace(input);
+            return;
         }
 
         input = quote_sanitised;
