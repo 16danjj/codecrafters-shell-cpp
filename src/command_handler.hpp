@@ -54,31 +54,56 @@ namespace shell {
         return input;
     }
 
+    string pattern_match_handling(string& input, regex pattern, string keyword) {
+
+        string::const_iterator start = input.cbegin();
+        smatch match;
+        string result;
+        
+        
+        while(regex_search(start, input.cend(), match, pattern)){
+            if (match.prefix().length()) {
+                string prefixed_string = match.prefix();
+                result += remove_whitespace(prefixed_string);
+            }
+
+            result += match[1];
+
+            string temp_suffix = match.suffix();
+            
+            if (keyword == "double" && temp_suffix.find('\"') == string::npos) {
+                result += remove_whitespace(temp_suffix);
+            }
+            
+            if (keyword == "single" && temp_suffix.find('\'') == string::npos) {
+                result += remove_whitespace(temp_suffix);
+            }
+            
+            start = match.suffix().first;
+        }
+
+        result = result.empty()? input : result;
+
+        return result;
+    }
+
     void handle_input(string& input) {
 
         string quote_sanitised;
-        regex pattern("'([^']*)'");
-        smatch match;
-        string::const_iterator start = input.cbegin();
+        regex pattern_single_quote("'([^']*)'");
+        regex pattern_double_quote("\"([^\"]*)\"");
 
-        if (input.find('\'') != string::npos) {
-            while(regex_search(start, input.cend(), match, pattern)){
-                if (match.prefix().length()) {
-                    string prefixed_string = match.prefix();
-                    quote_sanitised += remove_whitespace(prefixed_string);
-                }
+        if (input.find('\"') != string::npos) {
+            quote_sanitised = pattern_match_handling(input, pattern_double_quote, "double");
+        }
 
-                quote_sanitised += match[1];
+        quote_sanitised = quote_sanitised.empty()? input : quote_sanitised;
 
-                string temp_suffix = match.suffix();
-                
-                if (temp_suffix.find('\'') == string::npos) {
-                    quote_sanitised += remove_whitespace(temp_suffix);
-                }
-                
-                start = match.suffix().first;
-            }
-        } else {
+        if (quote_sanitised.find('\'') != string::npos) {
+            quote_sanitised = pattern_match_handling(quote_sanitised, pattern_single_quote, "single");
+        } 
+
+        if (quote_sanitised.empty()) {
             quote_sanitised += remove_whitespace(input);
         }
 
@@ -86,6 +111,7 @@ namespace shell {
     }
 
     int execute(const string& command) {
+
         size_t index_first_space = command.find(" ");
         string extracted_command;
         string input;
@@ -97,6 +123,7 @@ namespace shell {
             handle_input(input);
         } else {
             extracted_command = command;
+
         }
 
 
