@@ -73,17 +73,11 @@ namespace shell {
                 
         while(regex_search(start, input.cend(), match, pattern)){
 
-            cout << "Matched 0: " << match[0] << endl;
-            cout << "Matched 1: " << match[1] << endl;
-            cout << "Matched 2: " << match[2] << endl;
-            cout << "Prefix is : " << match.prefix() << endl;
-            cout << "Suffix is : " << match.suffix() << endl;
             if (match.prefix().length()) {
                 string prefixed_string = match.prefix();
                 result += remove_whitespace(prefixed_string);
             }
 
-        
             string temp_suffix = match.suffix();
             string matched_value = match[0];
             string matched_group1 = match[1];
