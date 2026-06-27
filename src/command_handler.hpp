@@ -72,12 +72,6 @@ namespace shell {
         string result;
                 
         while(regex_search(start, input.cend(), match, pattern)){
-
-            cout << "Matched 0: " << match[0] << endl;
-            cout << "Matched 1: " << match[1] << endl;
-            cout << "Matched 2: " << match[2] << endl;
-            cout << "Prefix is : " << match.prefix() << endl;
-            cout << "Suffix is : " << match.suffix() << endl;
             
             if (match.prefix().length()) {
                 string prefixed_string = match.prefix();
@@ -101,8 +95,6 @@ namespace shell {
             if (!matched_group2.empty()) {
                 result += matched_group2;
             }
-
-            //cout << "Result is : " << result << endl;
             
             if (keyword == "double" && temp_suffix.find('\"') == string::npos) {
                 result += remove_whitespace(temp_suffix);
