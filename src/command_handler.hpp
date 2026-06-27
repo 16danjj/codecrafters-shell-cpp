@@ -93,7 +93,6 @@ namespace shell {
                     result += "\\";
                 } 
                 result += remove_whitespace(matched_group1);
-                cout << "RESULT IS : " << result << endl;
             }
 
             if (!matched_group2.empty()) {
