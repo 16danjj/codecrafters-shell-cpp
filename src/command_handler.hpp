@@ -150,7 +150,7 @@ namespace shell {
     void handle_input(string& input) {
 
         string quote_sanitised = input;
-        regex pattern("\\\\(.*)|'([^']*)'|\"([^\\\\\"]*)\"");
+        regex pattern("\"(.*)\"|\\\\(.*)|'([^']*)'|\"([^\\\\\"]*)\"");
 
         if (input.find('\"') != string::npos || input.find('\'') != string::npos || input.find('\\') != string::npos) {
             quote_sanitised = pattern_match_handling(input, pattern);
