@@ -59,7 +59,7 @@ namespace shell {
                 }
 
                 else if ((index - 1) >= 0 && input[index - 1] != '\\') {
-
+                    cout << "YOO" << endl;
                     start_index = index;
                     input.erase(start_index, 1);
                 }
@@ -99,15 +99,13 @@ namespace shell {
                 result += remove_whitespace(prefixed_string);
             }
 
-        
+    
             string temp_suffix = match.suffix();
             string matched_value = match[0];
             string matched_group1 = match[1];
             string matched_group2 = match[2];
             string matched_group3 = match[3];
             size_t matched_size = matched_value.size() - 1;
-
-
 
             if (!matched_group1.empty()) {
                 if (matched_group1.find("\\") == 0) {
