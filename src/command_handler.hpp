@@ -37,14 +37,25 @@ namespace shell {
             range = 0;
 
             if (input[index] == '\\') {
-
-                
                 start_index = index;
                 if (input[index + 1] == '\\') {
                     index += 1;
                 }
 
                 input.erase(start_index, 1);
+            }
+
+            else if (input[index] == '\"') {
+
+                if (index == 0) {
+                    input.erase(0,1);
+                }
+
+                else if ((index - 1) >= 0 && input[index - 1] != '\\') {
+
+                    start_index = index;
+                    input.erase(start_index, 1);
+                }
             }
 
             else if (input[index] == ' ') {
@@ -74,6 +85,13 @@ namespace shell {
         string result;
                 
         while(regex_search(start, input.cend(), match, pattern)){
+
+            /*cout << "Match 0" << match[0] << endl;
+            cout << "Match 1" << match[1] << endl;
+            cout << "Match 2" << match[2] << endl;
+            cout << "Match 3" << match[3] << endl;
+            cout << "Prefix" << match.prefix() << endl;
+            cout << "Suffix" << match.suffix() << endl; */
             
             if (match.prefix().length()) {
                 string prefixed_string = match.prefix();
@@ -88,11 +106,21 @@ namespace shell {
             string matched_group3 = match[3];
 
 
+
+
             if (!matched_group1.empty()) {
                 if (matched_group1.find("\\") == 0) {
                     result += "\\";
                 } 
-                result += remove_whitespace(matched_group1);
+
+                if (matched_value[0] == '\\' && matched_value[1] == '\"') {
+                    string new_input = "\\" + matched_group1;
+                    result += remove_whitespace(new_input);
+                } else{
+                    result += remove_whitespace(matched_group1);
+                }
+
+                
             }
 
             if (!matched_group2.empty()) {
@@ -122,7 +150,7 @@ namespace shell {
     void handle_input(string& input) {
 
         string quote_sanitised = input;
-        regex pattern("\\\\(.*)|'([^']*)'|\"([^\"]*)\"");
+        regex pattern("\\\\(.*)|'([^']*)'|\"([^\\\\\"]*)\"");
 
         if (input.find('\"') != string::npos || input.find('\'') != string::npos || input.find('\\') != string::npos) {
             quote_sanitised = pattern_match_handling(input, pattern);
