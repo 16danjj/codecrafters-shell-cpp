@@ -85,6 +85,13 @@ namespace shell {
         string result;
                 
         while(regex_search(start, input.cend(), match, pattern)){
+
+            cout << "Match 0" << match[0] << endl;
+            cout << "Match 1" << match[1] << endl;
+            cout << "Match 2" << match[2] << endl;
+            cout << "Match 3" << match[3] << endl;
+            cout << "Prefix" << match.prefix() << endl;
+            cout << "Suffix" << match.suffix() << endl; 
             
             if (match.prefix().length()) {
                 string prefixed_string = match.prefix();
@@ -112,6 +119,8 @@ namespace shell {
                 } else if (matched_value[0] == '\"' && matched_value[matched_size] == '\"'){
                     string new_input = "\"" + matched_group1 + "\"";
                     result += remove_whitespace(new_input);
+
+                    cout << "YO" << endl;
                 }
                 else{
                     result += remove_whitespace(matched_group1);
