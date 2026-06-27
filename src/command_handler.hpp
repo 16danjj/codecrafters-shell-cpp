@@ -27,29 +27,25 @@ namespace shell {
 
     string remove_whitespace(string& input) {
 
-
         // Space handling
         int index = 0;
         int start_index;
         size_t range;
+        
 
         while (index < input.length()) {
             
-
             start_index = 0;
             range = 0;
 
             if (input[index] == '\\') {
                 start_index = index;
+
                 if (input[index + 1] == '\\') {
                     index += 1;
+                    input.erase(start_index, 1);
                 }
 
-                input.erase(start_index, 1);
-
-                if (index == input.length() - 1 && input[index] == '\"') {
-                    input.erase(index, 1);
-                }
             }
 
             else if (input[index] == '\"') {
@@ -59,8 +55,12 @@ namespace shell {
                 }
 
                 else if ((index - 1) >= 0 && input[index - 1] != '\\') {
-                    cout << "YOO" << endl;
                     start_index = index;
+                    input.erase(start_index, 1);
+                }
+
+                else {
+                    start_index = index - 1;
                     input.erase(start_index, 1);
                 }
 
