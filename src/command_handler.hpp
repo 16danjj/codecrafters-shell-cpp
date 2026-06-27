@@ -74,13 +74,6 @@ namespace shell {
         string result;
                 
         while(regex_search(start, input.cend(), match, pattern)){
-
-            /*cout << "Match 0" << match[0] << endl;
-            cout << "Match 1" << match[1] << endl;
-            cout << "Match 2" << match[2] << endl;
-            cout << "Match 3" << match[3] << endl;
-            cout << "Prefix" << match.prefix() << endl;
-            cout << "Suffix" << match.suffix() << endl;*/
             
             if (match.prefix().length()) {
                 string prefixed_string = match.prefix();
@@ -107,11 +100,14 @@ namespace shell {
             }
 
             if (!matched_group3.empty()) {
-                
                 result += matched_group3;
             }
 
             if (temp_suffix.find('\"') == string::npos && !matched_group3.empty() || temp_suffix.find('\'') == string::npos && !matched_group2.empty()) {
+                result += remove_whitespace(temp_suffix);
+            }
+
+            if (matched_value == "\"\"" || matched_value == "\'\'") {
                 result += remove_whitespace(temp_suffix);
             }
             
