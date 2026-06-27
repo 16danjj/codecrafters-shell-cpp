@@ -26,17 +26,19 @@ namespace shell {
     };
 
     string remove_whitespace(string& input) {
+
         // Space handling
         int index = 0;
         int start_index;
         size_t range;
 
         while (index < input.length()) {
-
             start_index = 0;
             range = 0;
 
             if (input[index] == '\\') {
+
+                
                 start_index = index;
                 if (input[index + 1] == '\\') {
                     index += 1;
@@ -65,7 +67,7 @@ namespace shell {
         return input;
     }
 
-    string pattern_match_handling(string& input, regex pattern, string keyword) {
+    string pattern_match_handling(string& input, regex pattern) {
 
         string::const_iterator start = input.cbegin();
         smatch match;
@@ -83,26 +85,26 @@ namespace shell {
             string matched_value = match[0];
             string matched_group1 = match[1];
             string matched_group2 = match[2];
+            string matched_group3 = match[3];
 
-            if (matched_value == "\\\\") {
-                result += "\\";
-            }
 
             if (!matched_group1.empty()) {
-                result += matched_group1;
+                if (matched_group1.find("\\") == 0) {
+                    result += "\\";
+                } 
+                result += remove_whitespace(matched_group1);
+                cout << "RESULT IS : " << result << endl;
             }
 
             if (!matched_group2.empty()) {
                 result += matched_group2;
             }
-            
-            if (keyword == "double" && temp_suffix.find('\"') == string::npos) {
-                result += remove_whitespace(temp_suffix);
+
+            if (!matched_group3.empty()) {
+                result += matched_group3;
             }
-            
-            if (keyword == "single" && temp_suffix.find('\'') == string::npos && count(temp_suffix.begin(), temp_suffix.end(), '\\') <= 1) {
-                result += remove_whitespace(temp_suffix);
-            } else if (matched_value.find('\\') != string::npos && count(temp_suffix.begin(), temp_suffix.end(), '\\') <= 1) {
+
+            if (temp_suffix.find('\"') == string::npos || temp_suffix.find('\'') == string::npos) {
                 result += remove_whitespace(temp_suffix);
             }
             
@@ -116,22 +118,12 @@ namespace shell {
 
     void handle_input(string& input) {
 
-        string quote_sanitised;
-        regex pattern_single_quote("\\\\([^\\\\]*)\\\\|'([^']*)'");
-        //regex pattern_single_quote("'([^']*)'|\\\\(.*)\\\\");
+        string quote_sanitised = input;
+        regex pattern("\\\\(.*)|'([^']*)'|\"([^\"]*)\"");
 
-        regex pattern_double_quote("\"([^\"]*)\"");
-
-
-        if (input.find('\"') != string::npos) {
-            quote_sanitised = pattern_match_handling(input, pattern_double_quote, "double");
+        if (input.find('\"') != string::npos || input.find('\'') != string::npos || input.find('\\') != string::npos) {
+            quote_sanitised = pattern_match_handling(input, pattern);
         }
-
-        quote_sanitised = quote_sanitised.empty()? input : quote_sanitised;
-
-        if (quote_sanitised.find('\'') != string::npos || quote_sanitised.find('\\') != string::npos) {
-            quote_sanitised = pattern_match_handling(quote_sanitised, pattern_single_quote, "single");
-        } 
 
         if (quote_sanitised == input) {
             input = remove_whitespace(input);
